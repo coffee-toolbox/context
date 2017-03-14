@@ -59,12 +59,14 @@ Context.withTimeout: (parent: Context) -> [ctx: Context, cancel: (reason: string
 # Context.CANCELLED is used.
 # If it is timeouted, Context.TIMEOUTED is passed to thened function.
 
-# Context provide a Promise-like thenable interface to handle its cancellation
-# signals.
-.then: (f: (reason: string)-> any) -> Promise
+# Context provide a Promise-like interface to handle its cancellation signals.
+.whenCancelled: (f: (reason: string)-> any) -> Promise
 # Pass a function that handles the cancellation signal
 
-# Remind to call cancel() when the Context is done. Repeated calling of cancle()
+.whenThrown: (f: (error: thrown)-> any) -> Promise
+# Pass a function that handles exceptions.
+
+# Remind to call cancel() when the Context is done. Repeated calling of cancel()
 # would do nothing.
 ```
 ## Example
@@ -77,7 +79,7 @@ doAdd = (pctx, value, timeout)->
 	.then (v)->
 		cancel()
 		console.log v
-	ctx.then (v)->
+	ctx.whenCancelled (v)->
 		console.log v
 
 slowAdd = (a, b)->

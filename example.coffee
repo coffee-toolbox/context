@@ -6,7 +6,7 @@ doAdd = (pctx, value, timeout)->
 	.then (v)->
 		cancel()
 		console.log v
-	ctx.then (v)->
+	ctx.whenCancelled (v)->
 		console.log v
 
 slowAdd = (a, b)->

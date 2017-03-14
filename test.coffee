@@ -3,20 +3,20 @@
 a = Context.withValue Context.background(), {a: 1}
 
 [b, cancel] = Context.withCancel a
-b.then (v)->
+b.whenCancelled (v)->
 	console.log 'b exit', v
 
 [c, cancel_c] = Context.withTimeout b, 1000
-c.then (v)->
+c.whenCancelled (v)->
 	console.log 'c exit', v
 
 [d, cancel_d] = Context.withTimeout c, 2000
-d.then (v)->
+d.whenCancelled (v)->
 	cancel(Context.reason 'test')
 	console.log 'd exit', v
 
 e = Context.withValue b, {a: 2}
-e.then (v)->
+e.whenCancelled (v)->
 	console.log 'e exit', v
 
 console.log e

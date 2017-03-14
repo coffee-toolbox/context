@@ -3,16 +3,17 @@
 # @parent is a Context whose cancellation cancels this context.
 # the constructor should not be called directly, use .background()
 # .withValue(), .withCancel() or .withTimeout().
-# the Context is a Promise-like value that is thenable, passing a
-# cancellation reason to the thened function.
+# the Context is a Promise-like value, passing a cancellation reason
+# to the function passed to .whenCancelled, and has a .whenThrown to
+# deal with exceptions.
 class Context
 	constructor: (@parent)->
 		undefined
 
-	then: (f)->
+	whenCancelled: (f)->
 		@p.then f
 
-	catch: (f)->
+	whenThrown: (f)->
 		@p.catch f
 
 	@CANCELLED: 'context cancelled'
@@ -64,7 +65,7 @@ class Context
 				else
 					res Context.CANCELLED
 
-		pp = parent
+		pp = parent.p
 
 		ctx.p = Promise.race [pp, pc]
 		cancel = (reason)->
@@ -98,7 +99,7 @@ class Context
 			ctx.$e.emit 'timeout'
 		, timeout
 
-		pp = parent
+		pp = parent.p
 
 		ctx.p = Promise.race [pp, pc, pt]
 		cancel = (reason)->
