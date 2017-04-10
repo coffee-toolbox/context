@@ -98,3 +98,5 @@ context timeouted
 context cancelled
 ###
 ```
+## Caveat
+If parent context is cancelled, the callback registered whenCancelled for parent is executed before the children's.
